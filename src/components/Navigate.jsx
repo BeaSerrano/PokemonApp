@@ -22,7 +22,7 @@ export const Navigate = () => {
 						/>
 					</div>
 
-					<button className='btn-search'>Buscar</button>
+					{/* <button className='btn-search'>Buscar</button> */}
 				</form>
 			</header>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export const PokemonCard = ({pokemon}) => {
+    /* const evolutionInfo = pokemon.evolution_info; */
     return (
         <Link to={`/pokemon/${pokemon.id}`} className="card-pokemon">
 
@@ -18,7 +19,6 @@ export const PokemonCard = ({pokemon}) => {
                 
 			</div>
 			<div className='card-info'>
-				
 				<h3>{pokemon.name}</h3>
 				<div className='card-types'>
 					{pokemon.types.map(type => (
@@ -27,6 +27,13 @@ export const PokemonCard = ({pokemon}) => {
 						</span>
 					))}
 				</div>
+                
+                    {/* <div className="card-types">
+                    {evolutionInfo && evolutionInfo.evolves_from_species && (
+                        <span>Evolución de: {evolutionInfo.evolves_from_species}</span>
+                         )}
+                    </div> */}
+                
 			</div>
 
         </Link>

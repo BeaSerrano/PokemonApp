@@ -5,6 +5,7 @@ import { PokemonContext } from './PokemonContext';
 export const PokemonProvider = ({ children }) => {
 	const [allPokemons, setAllPokemons] = useState([]);
 	const [globalPokemons, setGlobalPokemons] = useState([]);
+	const [evolutionPokemons, setEvolutionPokemons] = useState([]);
 	const [offset, setOffset] = useState(0);
 
 	// Utilizar CustomHook - useForm
@@ -17,7 +18,7 @@ export const PokemonProvider = ({ children }) => {
 	const [active, setActive] = useState(false);
 
     // lLamar 50 pokemones a la API
-	const getAllPokemons = async (limit = 50) => {
+	const getAllPokemons = async (limit = 30) => {
 		const baseURL = 'https://pokeapi.co/api/v2/';
 
 		const res = await fetch(
@@ -65,6 +66,49 @@ export const PokemonProvider = ({ children }) => {
 		return data;
 	};
 
+			/* // evolution from pokemons
+			const getEvolutionPokemons = async (id) => {
+				const baseURL = 'https://pokeapi.co/api/v2/pokemon-species/${id}';
+
+				const res = await (`${baseURL}pokemon-species/${id}`);
+				const data = await res.json();
+
+				const promises = data.results.map(async pokemonEv => {
+					const res = await fetch(pokemonEv.url);
+					const data = await res.json();
+					return data;
+				});
+				const results = await Promise.all(promises);
+
+				setEvolutionPokemons([...allPokemons, ...results]);
+				setLoading(false);
+			}; */
+
+			// evolucion pokemons
+			const getEvolutionPokemons = async (id) => {
+				const baseURL = 'https://pokeapi.co/api/v2/pokemon-species/';
+
+				const res = await fetch(`${baseURL}${id}`);
+				const data = await res.json();
+
+
+				const evolutionChainURL = data.evolution_chain.url;
+
+				const evolutionChainRes = await fetch(evolutionChainURL);
+				const evolutionChainData = await evolutionChainRes.json();
+
+				console.log(evolutionChainData);
+
+				// acceso evolucion
+				const firstPokemonURL = evolutionChainData.chain.species.url;
+				const firstPokemonRes = await fetch(firstPokemonURL);
+				const firstPokemonData = await firstPokemonRes.json();
+
+				setEvolutionPokemons([...allPokemons, ...results]);
+				setLoading(false);
+			};
+
+
     useEffect(() => {
 		getAllPokemons();
 	}, [offset]);
@@ -75,23 +119,24 @@ export const PokemonProvider = ({ children }) => {
 
     // BTN CARGAR MÁS
 	const onClickLoadMore = () => {
-		setOffset(offset + 50);
+		setOffset(offset + 30);
 	};
 
     return (
 		<PokemonContext.Provider
-			value={{
-				valueSearch,
-				onInputChange,
-				onResetForm,
-				allPokemons,
-				globalPokemons,
-				getPokemonByID,
-				onClickLoadMore,
-				// Loader
-				loading,
-				setLoading
-			}}
+		value={{
+			valueSearch,
+			onInputChange,
+			onResetForm,
+			allPokemons,
+			globalPokemons,
+			getPokemonByID,
+			onClickLoadMore,
+			// Loader
+			loading,
+			setLoading,
+			evolutionPokemons, // Asegúrate de incluir la información de evolución en el contexto
+		  }}
 		>
 			{children}
 		</PokemonContext.Provider>
