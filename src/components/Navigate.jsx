@@ -5,7 +5,6 @@ import { PokemonContext } from '../context/PokemonContext';
 export const Navigate = () => {
 
     const {onInputChange, valueSearch, onResetForm} = useContext(PokemonContext);
-
 	const navigate = useNavigate();
 
 	const onSearchSubmit = (e) => {
@@ -13,7 +12,6 @@ export const Navigate = () => {
 		navigate('/search', {
 			state: valueSearch
 		});
-
 		onResetForm();
 	}
 

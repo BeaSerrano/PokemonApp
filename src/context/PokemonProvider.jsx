@@ -7,23 +7,19 @@ export const PokemonProvider = ({ children }) => {
 	const [globalPokemons, setGlobalPokemons] = useState([]);
 	const [evolutionPokemons, setEvolutionPokemons] = useState([]);
 	const [offset, setOffset] = useState(0);
-
-	// Utilizar CustomHook - useForm
 	const { valueSearch, onInputChange, onResetForm } = useForm({
 		valueSearch: '',
-	});
-
-	// Estados para la aplicación simples
+	});	
 	const [loading, setLoading] = useState(true);
-	const [active, setActive] = useState(false);
+	const [filteredPokemons, setFilteredPokemons] = useState([]);
 
-    // lLamar 50 pokemones a la API
+    // lLamar 30 pokemons
 	const getAllPokemons = async (limit = 30) => {
 		const baseURL = 'https://pokeapi.co/api/v2/';
 
 		const res = await fetch(
-			`${baseURL}pokemon?limit=${limit}&offset=${offset}`
-		);
+            `${baseURL}pokemon?limit=${limit}&offset=${offset}`
+        );
 		const data = await res.json();
 
 		const promises = data.results.map(async pokemon => {
@@ -37,7 +33,7 @@ export const PokemonProvider = ({ children }) => {
 		setLoading(false);
 	};
 
-	// Llamar todos los pokemones
+	// llamar todos los pokemons
 	const getGlobalPokemons = async () => {
 		const baseURL = 'https://pokeapi.co/api/v2/';
 
@@ -57,7 +53,7 @@ export const PokemonProvider = ({ children }) => {
 		setLoading(false);
 	};
 
-	// Llamar a un pokemon por ID
+	// llamar a un pokemon por ID
 	const getPokemonByID = async id => {
 		const baseURL = 'https://pokeapi.co/api/v2/';
 
@@ -68,27 +64,29 @@ export const PokemonProvider = ({ children }) => {
 
 			// evolucion pokemons
 			const getEvolutionPokemons = async (id) => {
-				const baseURL = 'https://pokeapi.co/api/v2/pokemon-species/';
+					const baseURL = 'https://pokeapi.co/api/v2/pokemon-species/';
+					const res = await fetch(`${baseURL}${id}`);
+					const data = await res.json();
+			
+					const evolutionChainURL = data.evolution_chain.url;
+					const evolutionChainRes = await fetch(evolutionChainURL);
+					const evolutionChainData = await evolutionChainRes.json();
 
-				const res = await fetch(`${baseURL}${id}`);
-				const data = await res.json();
-
-
-				const evolutionChainURL = data.evolution_chain.url;
-
-				const evolutionChainRes = await fetch(evolutionChainURL);
-				const evolutionChainData = await evolutionChainRes.json();
-
-				console.log(evolutionChainData);
-
-				// acceso evolucion
-				const firstPokemonURL = evolutionChainData.chain.species.url;
-				const firstPokemonRes = await fetch(firstPokemonURL);
-				const firstPokemonData = await firstPokemonRes.json();
-
-				setEvolutionPokemons([...allPokemons, ...results]);
-				setLoading(false);
+					const firstPokemonURL = evolutionChainData.chain.species.url;
+					const firstPokemonRes = await fetch(firstPokemonURL);
+					const firstPokemonData = await firstPokemonRes.json();
+			
+					setEvolutionPokemons(prevEvolutionPokemons => [...prevEvolutionPokemons, firstPokemonData]);
+					setLoading(false);
 			};
+
+	//busqueda tiempo real
+	const getFilteredPokemons = () => {
+        const filtered = globalPokemons.filter(pokemon =>
+            pokemon.name.toLowerCase().includes(valueSearch.toLowerCase())
+        );
+        setFilteredPokemons(filtered);
+    };
 
 
     useEffect(() => {
@@ -102,6 +100,10 @@ export const PokemonProvider = ({ children }) => {
 	useEffect(() => {
 		getEvolutionPokemons();
 	}, []);
+
+	useEffect(() => {
+		getFilteredPokemons();
+	}, [valueSearch, globalPokemons]);
 
     // BTN CARGAR MÁS
 	const onClickLoadMore = () => {
@@ -121,6 +123,7 @@ export const PokemonProvider = ({ children }) => {
 			onClickLoadMore,
 			loading,
 			setLoading,
+			filteredPokemons,
 		}}
 		>
 			{children}

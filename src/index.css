@@ -307,58 +307,22 @@ header form {
 	font-size: 30px;
 }
 
-/* Stats */
-.container-stats {
-	display: flex;
-	gap: 50px;
-	align-items: center;
-}
-
-.stats {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	flex: 1;
-}
-
-.stat-group {
-	display: flex;
-	align-items: center;
-	gap: 20px;
-}
-
-.stat-group span {
-	flex: 20%;
-	font-weight: 500;
-	font-size: 18px;
-}
-
-.progress-bar {
-	width: 100%;
-	height: 30px;
-	background-color: var(--color-primary);
-	border-radius: 10px;
-}
-/* Search Page */
-
 .p-search{
+	margin-top:20px;
 	margin-bottom: 30px;
 	font-size: 22px;
+	text-align: center;
 }
 
 .p-search span{
 	font-weight: 700;
 }
 
-/* Loader */
-
 .container-loader{
 	display: flex;
 	justify-content: center;
 	margin: 200px 0;
 }
-
-/* Btn Load More */
 
 .container-btn-load-more{
 	display: flex;
