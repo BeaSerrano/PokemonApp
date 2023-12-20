@@ -66,24 +66,6 @@ export const PokemonProvider = ({ children }) => {
 		return data;
 	};
 
-			/* // evolution from pokemons
-			const getEvolutionPokemons = async (id) => {
-				const baseURL = 'https://pokeapi.co/api/v2/pokemon-species/${id}';
-
-				const res = await (`${baseURL}pokemon-species/${id}`);
-				const data = await res.json();
-
-				const promises = data.results.map(async pokemonEv => {
-					const res = await fetch(pokemonEv.url);
-					const data = await res.json();
-					return data;
-				});
-				const results = await Promise.all(promises);
-
-				setEvolutionPokemons([...allPokemons, ...results]);
-				setLoading(false);
-			}; */
-
 			// evolucion pokemons
 			const getEvolutionPokemons = async (id) => {
 				const baseURL = 'https://pokeapi.co/api/v2/pokemon-species/';
@@ -117,6 +99,10 @@ export const PokemonProvider = ({ children }) => {
 		getGlobalPokemons();
 	}, []);
 
+	useEffect(() => {
+		getEvolutionPokemons();
+	}, []);
+
     // BTN CARGAR MÁS
 	const onClickLoadMore = () => {
 		setOffset(offset + 30);
@@ -131,12 +117,11 @@ export const PokemonProvider = ({ children }) => {
 			allPokemons,
 			globalPokemons,
 			getPokemonByID,
+			evolutionPokemons,
 			onClickLoadMore,
-			// Loader
 			loading,
 			setLoading,
-			evolutionPokemons, // Asegúrate de incluir la información de evolución en el contexto
-		  }}
+		}}
 		>
 			{children}
 		</PokemonContext.Provider>

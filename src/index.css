@@ -368,17 +368,31 @@ header form {
 	margin-top: 20px;
 }
 
-.btn-load-more{
+.btn-back-list{
 	border: none;
 	padding: 15px 40px;
 	font-family: inherit;
-	background-color: var(--color-primary);
-	color: #fff;
-	border-radius: 10px;
+	background-color: transparent;
 	cursor: pointer;
+	font-weight: 700;
+	color:red;
+	font-size: 30px;
 }
 
-.btn-load-more:hover{
-	background-color: var(--color-primary-hover);
-	color: #000;
+.btn-back-list:hover{
+	color: black;
+}
+
+a:-webkit-any-link {
+    text-decoration: none;
+}
+
+.back-list p{
+	font-weight: 700;
+	color:red;
+	font-size: 30px;
+}
+
+.back-list p:hover{
+	color:black;
 }

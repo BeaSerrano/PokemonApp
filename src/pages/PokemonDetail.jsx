@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Loader } from '../components';
 import { PokemonContext } from '../context/PokemonContext';
@@ -57,6 +58,11 @@ export const PokemonDetail = () => {
 							</div>
 						</div>
 					</div>
+                    <div className="back-list">
+                        <Link to='/'>
+                            <p>{'<<<'} volver al listado</p>
+                        </Link>
+                    </div>
 
 					
 				</>
